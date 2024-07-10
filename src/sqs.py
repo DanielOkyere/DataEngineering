@@ -77,7 +77,34 @@ def update_queue_attributes(queue_url, attributes):
 def delete_queue_attributes(queue_url):
     return sqs_client().delete_queue(QueueUrl=queue_url)
 
+def send_message_to_queue(queue_url, msg_attributes, msg_body):
+    return sqs_client().send_message(
+        QueueUrl=queue_url,
+        MessageAttributes=msg_attributes,
+        MessageBody=msg_body
+    )
+
+
 if __name__ == '__main__':
+    queue_name = create_queue_for_dead_letter()
     print(
-        delete_queue_attributes(MAIN_QUEUE_URL)
+        send_message_to_queue(
+            queue_url=MAIN_QUEUE_NAME,
+            msg_attributes={
+                'Title': {
+                    'DataType': 'String',
+                    'StringValue': 'Testing FIFO Queue'
+                },
+                'Author': {
+                    'DataType': 'String',
+                    'StringValue': 'Daniel'
+                },
+                'Time': {
+                    'DataType': 'Number',
+                    'StringValue': '6'
+                }
+
+            },
+            msg_body="This is the first sqs Message"
+        )
     )
