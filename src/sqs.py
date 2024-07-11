@@ -115,6 +115,19 @@ def poll_queue_for_message():
         MaxNumberOfMessages=10,
     )
 
+def process_message_from_queue():
+    queue_messages = poll_queue_for_message()
+    if 'Messages' in queue_messages and len(queue_messages['Messages']) >= 1:
+        for message in queue_messages['Messages']:
+            print("Processing message: " + message["MessageId"] + "with text " + message["Body"])
+            delete_queue_attributes(message["ReceiptHandle"])
+
+def delete_message_from_queue(receipt_handle):
+    sqs_client().delete_message(
+        QueueUrl="https://sqs.eu-central-1.amazonaws.com/590183934493/awesome_sqs",
+        RecieptHandle=receipt_handle
+    )
+
 if __name__ == '__main__':
     # send_batch_messages_to_queue("https://sqs.eu-central-1.amazonaws.com/590183934493/awesome_sqs")
     print(poll_queue_for_message())
