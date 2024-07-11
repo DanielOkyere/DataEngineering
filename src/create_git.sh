@@ -2,4 +2,4 @@
 
 git add ./src &&
 git commit -m "update completed" &&
-git push
+git push && clear
