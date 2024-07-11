@@ -15,13 +15,13 @@ def sqs_client():
     return sqs
 
 
-def create_sqs_queue():
-    return sqs_client().create_queue(QueueName=QUEUE_NAME)
+def create_sqs_queue(queue_name):
+    return sqs_client().create_queue(QueueName=queue_name)
 
 
-def create_fifo_sqs_queue():
+def create_fifo_sqs_queue(queue_name):
     return sqs_client().create_queue(
-        QueueName=FIFO_QUEUE_NAME,
+        QueueName=queue_name,
         Attributes={
             'FifoQueue': 'true'
         }
@@ -77,6 +77,7 @@ def update_queue_attributes(queue_url, attributes):
 def delete_queue_attributes(queue_url):
     return sqs_client().delete_queue(QueueUrl=queue_url)
 
+
 def send_message_to_queue(queue_url, msg_attributes, msg_body):
     return sqs_client().send_message(
         QueueUrl=queue_url,
@@ -85,26 +86,29 @@ def send_message_to_queue(queue_url, msg_attributes, msg_body):
     )
 
 
-if __name__ == '__main__':
-    queue_name = create_queue_for_dead_letter()
-    print(
-        send_message_to_queue(
-            queue_url=MAIN_QUEUE_NAME,
-            msg_attributes={
-                'Title': {
-                    'DataType': 'String',
-                    'StringValue': 'Testing FIFO Queue'
-                },
-                'Author': {
-                    'DataType': 'String',
-                    'StringValue': 'Daniel'
-                },
-                'Time': {
-                    'DataType': 'Number',
-                    'StringValue': '6'
-                }
-
+def send_batch_messages_to_queue(queue_url):
+    return sqs_client().send_message_batch(
+        QueueUrl=queue_url,
+        Entries=[
+            {
+                'Id': 'FirstMessage',
+                'MessageBody': 'This is a 1st message of batch'
             },
-            msg_body="This is the first sqs Message"
-        )
+            {
+                'Id': 'SecondMessage',
+                'MessageBody': 'This is a 2nd message of batch'
+            },
+            {
+                'Id': 'ThirdMessage',
+                'MessageBody': 'This is a 3rd message of batch'
+            },
+            {
+                'Id': 'FourthMessage',
+                'MessageBody': 'This is a 4th message of batch'
+            }
+        ]
     )
+
+
+if __name__ == '__main__':
+    send_batch_messages_to_queue("https://sqs.eu-central-1.amazonaws.com/590183934493/awesome_sqs")
