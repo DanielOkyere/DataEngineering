@@ -109,6 +109,12 @@ def send_batch_messages_to_queue(queue_url):
         ]
     )
 
+def poll_queue_for_message():
+    return sqs_client().receive_message(
+        QueueUrl="https://sqs.eu-central-1.amazonaws.com/590183934493/awesome_sqs",
+        MaxNumberOfMessages=10,
+    )
 
 if __name__ == '__main__':
-    send_batch_messages_to_queue("https://sqs.eu-central-1.amazonaws.com/590183934493/awesome_sqs")
+    # send_batch_messages_to_queue("https://sqs.eu-central-1.amazonaws.com/590183934493/awesome_sqs")
+    print(poll_queue_for_message())
