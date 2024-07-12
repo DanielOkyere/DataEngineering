@@ -132,5 +132,7 @@ def delete_message_from_queue(receipt_handle):
     )
 
 
+
+
 if __name__ == '__main__':
     process_message_from_queue()
