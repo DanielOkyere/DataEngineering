@@ -3,14 +3,16 @@ import json
 
 QUEUE_NAME = "MY-TEST-QUEUE"
 FIFO_QUEUE_NAME = "MY-TEST-FIFO-QUEUE.fifo"
-FIFO_QUEUE_URL = "https://sqs.eu-central-1.amazonaws.com/590183934493/MY-TEST-FIFO-QUEUE.fifo"
-DEAD_LETTER_QUEUE_NAME = 'DEAD-letter-queue-for-main'
-MAIN_QUEUE_NAME = 'MAIN-QUEUE'
+FIFO_QUEUE_URL = (
+    "https://sqs.eu-central-1.amazonaws.com/590183934493/MY-TEST-FIFO-QUEUE.fifo"
+)
+DEAD_LETTER_QUEUE_NAME = "DEAD-letter-queue-for-main"
+MAIN_QUEUE_NAME = "MAIN-QUEUE"
 MAIN_QUEUE_URL = "https://sqs.eu-central-1.amazonaws.com/590183934493/MAIN-QUEUE"
 
 
 def sqs_client():
-    sqs = boto3.client('sqs', region_name='eu-central-1')
+    sqs = boto3.client("sqs", region_name="eu-central-1")
     """:type : pyboto3.sqs"""
     return sqs
 
@@ -21,10 +23,7 @@ def create_sqs_queue(queue_name):
 
 def create_fifo_sqs_queue(queue_name):
     return sqs_client().create_queue(
-        QueueName=queue_name,
-        Attributes={
-            'FifoQueue': 'true'
-        }
+        QueueName=queue_name, Attributes={"FifoQueue": "true"}
     )
 
 
@@ -47,8 +46,8 @@ def create_main_queue_for_dead_letter():
             "VisibilityTimeout": "30",
             "MessageRetentionPeriod": "345680",
             "ReceiveMessageWaitTimeSeconds": "0",
-            "RedrivePolicy": json.dumps(redrive_policy)
-        }
+            "RedrivePolicy": json.dumps(redrive_policy),
+        },
     )
 
 
@@ -61,17 +60,11 @@ def list_queues():
 
 
 def get_queue_attributes(queue_url):
-    return sqs_client().get_queue_attributes(
-        QueueUrl=queue_url,
-        AttributeNames=['All']
-    )
+    return sqs_client().get_queue_attributes(QueueUrl=queue_url, AttributeNames=["All"])
 
 
 def update_queue_attributes(queue_url, attributes):
-    return sqs_client().set_queue_attributes(
-        QueueUrl=queue_url,
-        Attributes=attributes
-    )
+    return sqs_client().set_queue_attributes(QueueUrl=queue_url, Attributes=attributes)
 
 
 def delete_queue_attributes(queue_url):
@@ -80,9 +73,7 @@ def delete_queue_attributes(queue_url):
 
 def send_message_to_queue(queue_url, msg_attributes, msg_body):
     return sqs_client().send_message(
-        QueueUrl=queue_url,
-        MessageAttributes=msg_attributes,
-        MessageBody=msg_body
+        QueueUrl=queue_url, MessageAttributes=msg_attributes, MessageBody=msg_body
     )
 
 
@@ -90,23 +81,11 @@ def send_batch_messages_to_queue(queue_url):
     return sqs_client().send_message_batch(
         QueueUrl=queue_url,
         Entries=[
-            {
-                'Id': 'FirstMessage',
-                'MessageBody': 'This is a 1st message of batch'
-            },
-            {
-                'Id': 'SecondMessage',
-                'MessageBody': 'This is a 2nd message of batch'
-            },
-            {
-                'Id': 'ThirdMessage',
-                'MessageBody': 'This is a 3rd message of batch'
-            },
-            {
-                'Id': 'FourthMessage',
-                'MessageBody': 'This is a 4th message of batch'
-            }
-        ]
+            {"Id": "FirstMessage", "MessageBody": "This is a 1st message of batch"},
+            {"Id": "SecondMessage", "MessageBody": "This is a 2nd message of batch"},
+            {"Id": "ThirdMessage", "MessageBody": "This is a 3rd message of batch"},
+            {"Id": "FourthMessage", "MessageBody": "This is a 4th message of batch"},
+        ],
     )
 
 
@@ -119,20 +98,23 @@ def poll_queue_for_message():
 
 def process_message_from_queue():
     queue_messages = poll_queue_for_message()
-    if 'Messages' in queue_messages and len(queue_messages['Messages']) >= 1:
-        for message in queue_messages['Messages']:
-            print("Processing message: " + message["MessageId"] + "with text " + message["Body"])
+    if "Messages" in queue_messages and len(queue_messages["Messages"]) >= 1:
+        for message in queue_messages["Messages"]:
+            print(
+                "Processing message: "
+                + message["MessageId"]
+                + "with text "
+                + message["Body"]
+            )
             delete_queue_attributes(message["ReceiptHandle"])
 
 
 def delete_message_from_queue(receipt_handle):
     sqs_client().delete_message(
         QueueUrl="https://sqs.eu-central-1.amazonaws.com/590183934493/awesome_sqs",
-        RecieptHandle=receipt_handle
+        RecieptHandle=receipt_handle,
     )
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     process_message_from_queue()
