@@ -1,5 +1,5 @@
 import boto3
-
+import config
 
 TOPIC_NAME = "awesome-sns"
 TOPIC_ARN = "arn:aws:sns:eu-central-1:590183934493:awesome-sns"
