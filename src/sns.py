@@ -59,6 +59,10 @@ def create_sqs_queue_subscription(topic_arn, sqs_queue_arn):
     )
 
 
+def get_topic_subscriptions(topic_arn):
+    return sns_client().list_subscriptions_by_topic(TopicArn=topic_arn)
+
+
 if __name__ == "__main__":
     create_topic(TOPIC_NAME)
     # print(get_topics())
@@ -67,6 +71,7 @@ if __name__ == "__main__":
     # delete_topic(TOPIC_ARN)
     # create_email_subscription(TOPIC_ARN, 'daniel.kwame.okyere101@gmail.com')
     # create_sms_subscription(TOPIC_ARN, '549502748')
-    create_sqs_queue_subscription(
-        TOPIC_ARN, "arn:aws:sqs:eu-central-1:590183934493:awesome_sqs"
-    )
+    # create_sqs_queue_subscription(
+    #     TOPIC_ARN, "arn:aws:sqs:eu-central-1:590183934493:awesome_sqs"
+    # )
+    print(get_topic_subscriptions(TOPIC_ARN))
