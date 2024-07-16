@@ -35,9 +35,38 @@ def delete_topic(arn_string):
     return sns_client().delete_topic(TopicArn=arn_string)
 
 
+def create_email_subscription(topic_arn, email_address):
+    return sns_client().subscribe(
+        TopicArn=topic_arn,
+        Protocol="email",
+        Endpoint=email_address,
+    )
+
+
+def create_sms_subscription(topic_arn, phone_number):
+    return sns_client().subscribe(
+        TopicArn=topic_arn,
+        Protocol="sms",
+        Endpoint=f"+2330{phone_number}",
+    )
+
+
+def create_sqs_queue_subscription(topic_arn, sqs_queue_arn):
+    return sns_client().subscribe(
+        TopicArn=topic_arn,
+        Protocol="sqs",
+        Endpoint=sqs_queue_arn,
+    )
+
+
 if __name__ == "__main__":
-    # create_topic(TOPIC_NAME)
+    create_topic(TOPIC_NAME)
     # print(get_topics())
     # print(get_topic_attributes(TOPIC_ARN))
     # print(update_topic_attributes(TOPIC_ARN, TOPIC_NAME))
-    delete_topic(TOPIC_ARN)
+    # delete_topic(TOPIC_ARN)
+    # create_email_subscription(TOPIC_ARN, 'daniel.kwame.okyere101@gmail.com')
+    # create_sms_subscription(TOPIC_ARN, '549502748')
+    create_sqs_queue_subscription(
+        TOPIC_ARN, "arn:aws:sqs:eu-central-1:590183934493:awesome_sqs"
+    )
