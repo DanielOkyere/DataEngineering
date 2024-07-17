@@ -91,3 +91,12 @@ def deploy_lambda_function(function_name, runtime, handler, role_arn, source_fol
 
 def invoke_lambda_function(function_name):
     return lambda_client().invoke(FunctionName=function_name)
+
+
+def add_env_variables_to_lambda_function(function_name, env_variables):
+    return lambda_client().update_function_configuration(
+        FunctionName=function_name,
+        Environment=env_variables
+    )
+
+def update_lambda_function_code(function_name, src_folder):

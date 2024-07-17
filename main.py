@@ -14,5 +14,12 @@ if __name__ == "__main__":
     #     config.LAMBDA_ROLE_ARN,
     #     ".",
     # )
-    policy = policies.invoke_lambda_function(config.PYTHON_LAMBDA_NAME)
-    print(policy['Payload'].read().decode())
+    # policy = policies.invoke_lambda_function(config.PYTHON_LAMBDA_NAME)
+    # print(policy['Payload'].read().decode())
+
+    env_variables = {
+        'Variables': {
+            'ENV_VAR_TEST': 'This is an environment variable'
+        }
+    }
+    policies
