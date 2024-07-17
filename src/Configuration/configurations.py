@@ -27,8 +27,7 @@ class Configurations:
     LAMBDA_ROLE_ARN = "arn:aws:iam::590183934493:role/Lambda_Execution_Role"
     LAMBDA_TIMEOUT = 10
     LAMBDA_MEMORY = 128
-    LAMBDA_HANDLER = 'lambda_function.handler'
+    LAMBDA_HANDLER = "functions.handler"
 
-    PYTHON_36_RUNTIME = "python3.6"
-    PYTHON_LAMBDA_NAME = 'PythonLambdaFunction'
-
+    PYTHON_36_RUNTIME = "python3.9"
+    PYTHON_LAMBDA_NAME = "PythonLambdaFunction"

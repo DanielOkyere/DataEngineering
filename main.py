@@ -1,4 +1,4 @@
-from src.lambda_functions import policies, lambda_function
+from src.lambda_functions import policies, functions
 from src.Configuration import configurations
 from sys import path
 
@@ -12,7 +12,6 @@ if __name__ == "__main__":
         config.PYTHON_36_RUNTIME,
         config.LAMBDA_HANDLER,
         config.LAMBDA_ROLE_ARN,
-        'python_lambda'
-
+        ".",
     )
     print(policy)

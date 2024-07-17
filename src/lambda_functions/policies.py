@@ -4,11 +4,12 @@ import boto3
 from src.Configuration import configurations
 from os import path
 from src.Utilities import utils
+
 config = configurations.Configurations()
 
 
 def lambda_client():
-    aws_lambda = boto3.client("lambda", region="eu-central-1")
+    aws_lambda = boto3.client("lambda", region_name="eu-central-1")
     """ :type : pyboto3.lambda """
     return aws_lambda
 
@@ -68,9 +69,10 @@ def attach_access_policy_to_role():
     )
 
 
-def deploy_lambda_function(function_name, runtime, handler, role_arn, sourc_folder):
+def deploy_lambda_function(function_name, runtime, handler, role_arn, source_folder):
     Utils = utils.Utils()
-    folder_path = path.join(path.dirname(path.abspath(__file__)), sourc_folder)
+    folder_path = path.join(path.dirname(path.abspath(__file__)), source_folder)
+    print(folder_path)
     zip_file = Utils.make_zip_file_bytes(path=folder_path)
 
     return lambda_client().create_function(
@@ -80,7 +82,6 @@ def deploy_lambda_function(function_name, runtime, handler, role_arn, sourc_fold
         Handler=handler,
         Code={
             "ZipFile": zip_file,
-
         },
         Timeout=config.LAMBDA_TIMEOUT,
         MemorySize=config.LAMBDA_MEMORY,
