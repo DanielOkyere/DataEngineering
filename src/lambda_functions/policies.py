@@ -87,3 +87,7 @@ def deploy_lambda_function(function_name, runtime, handler, role_arn, source_fol
         MemorySize=config.LAMBDA_MEMORY,
         Publish=False,
     )
+
+
+def invoke_lambda_function(function_name):
+    return lambda_client().invoke(FunctionName=function_name)

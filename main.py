@@ -7,11 +7,12 @@ if __name__ == "__main__":
     paths = "../src"
     path.append(paths)
     config = configurations.Configurations()
-    policy = policies.deploy_lambda_function(
-        config.PYTHON_LAMBDA_NAME,
-        config.PYTHON_36_RUNTIME,
-        config.LAMBDA_HANDLER,
-        config.LAMBDA_ROLE_ARN,
-        ".",
-    )
-    print(policy)
+    # policy = policies.deploy_lambda_function(
+    #     config.PYTHON_LAMBDA_NAME,
+    #     config.PYTHON_36_RUNTIME,
+    #     config.LAMBDA_HANDLER,
+    #     config.LAMBDA_ROLE_ARN,
+    #     ".",
+    # )
+    policy = policies.invoke_lambda_function(config.PYTHON_LAMBDA_NAME)
+    print(policy['Payload'].read().decode())
